@@ -1,5 +1,5 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import TextTitle from './components/Title';
 import Decorator from './components/decorator';
@@ -7,7 +7,10 @@ import iconSeta from './assets/arrow_drop_down_24dp_666666_FILL0_wght400_GRAD0_o
 import visibleOff from './assets/visibility_off_24dp_434343_FILL0_wght400_GRAD0_opsz24.png'; 
 import visibleOn from './assets/visibility_24dp_434343_FILL0_wght400_GRAD0_opsz24.png'; 
 
-export default function App() {
+// USUARIO: paesguigo@gmail.com
+// SENHA: SEnha1234*
+
+export default function Cadastro({ navigation }) {
   const [isChecked, setIsChecked] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [cep, setCep] = useState('');
@@ -17,7 +20,18 @@ export default function App() {
   const [email, setEmail] = useState(''); 
   const [senha, setSenha] = useState(''); 
   const [numero, setNumero] = useState('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Estado para controlar a visibilidade da senha
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
+
+  const validaLogin = async (email, password) => { 
+    let regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    let regexSenha = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\S]{8,}$/;
+
+    if (regexEmail.test(email) && regexSenha.test(password)) {
+      navigation.navigate('Home'); 
+    } else {
+      Alert.alert('Dados inválidos', 'Por favor, verifique seu email e senha.');
+    }
+  };
 
   const buscarDadosCep = async (cepAtualizado) => { 
     try {
@@ -137,13 +151,22 @@ export default function App() {
           <View style={[styles.checkbox, isChecked && styles.checkboxChecked]} />
           <Text style={styles.checkboxLabel}>Concordo com os Termos e Condições</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity 
+        <View style={styles.btnGroup}>
+         <TouchableOpacity 
           style={styles.button} 
-          onPress={limparCampos} 
+          onPress={() => {
+            validaLogin(email, senha);
+            limparCampos();
+          }}
         >
           <Text style={styles.buttonText}>Cadastrar Conta</Text>
         </TouchableOpacity>
+         <TouchableOpacity 
+          style={styles.button} 
+          onPress={() => navigation.navigate('Login')} 
+        >
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity></View>
       </View>
     </SafeAreaView>
   );
@@ -243,7 +266,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    width: '50%'
+    width: '45%'
   },
   buttonText: {
     color: "#764701",
@@ -251,27 +274,9 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: 'bold'  
+  },
+  btnGroup : {
+     flexDirection: 'row',
+     justifyContent: 'space-between',
   }
 });
-=======
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Cadastro from './Cadastro'; 
-import Login from './Login'; 
-import Home from './Home'
-
-const Stack = createStackNavigator();
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
->>>>>>> master
